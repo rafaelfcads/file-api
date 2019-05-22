@@ -18,6 +18,7 @@ type DocumentFile struct {
 			ReferenceNumber   string `json:"referenceNumber"`
 			BillingNumber     string `json:"billingNumber"`
 			IsDispute         bool   `json:"isDispute"`
+			Dispute           string `json:"dispute"`
 			IssuedDate        string `json:"issuedDate"`
 			DueDate           string `json:"dueDate"`
 			TotalAmount       string `json:"totalAmount"`

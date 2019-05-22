@@ -73,7 +73,7 @@ func JsonToXlsx(docs model.DocumentFile) (*bytes.Buffer, error) {
 			xlsx.SetCellValue(sheet, fmt.Sprintf("C%d", rowInit+key), doc.ReferenceNumber)
 			xlsx.SetCellValue(sheet, fmt.Sprintf("D%d", rowInit+key), doc.BillingNumber)
 			xlsx.SetCellValue(sheet, fmt.Sprintf("E%d", rowInit+key), doc.Division)
-			xlsx.SetCellValue(sheet, fmt.Sprintf("F%d", rowInit+key), doc.IsDispute)
+			xlsx.SetCellValue(sheet, fmt.Sprintf("F%d", rowInit+key), doc.Dispute)
 			xlsx.SetCellValue(sheet, fmt.Sprintf("G%d", rowInit+key), doc.IssuedDate)
 			xlsx.SetCellValue(sheet, fmt.Sprintf("H%d", rowInit+key), doc.DueDate)
 			xlsx.SetCellValue(sheet, fmt.Sprintf("I%d", rowInit+key), doc.TotalAmount)
