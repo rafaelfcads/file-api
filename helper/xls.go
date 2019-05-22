@@ -53,7 +53,7 @@ func JsonToXlsx(docs model.DocumentFile) (*bytes.Buffer, error) {
 	const rowInit = 11
 
 	for keyMain, docItem := range docs.Consolidates {
-		sheet := docItem.SalesOrganization
+		sheet := docItem.SalesOrganization + "_" + docItem.Currency
 		createSheet(keyMain, sheet, xlsx)
 		createHeader(sheet, xlsx)
 		xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 2), docItem.CustomerName)
