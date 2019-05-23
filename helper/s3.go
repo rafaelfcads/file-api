@@ -3,6 +3,7 @@ package helper
 import (
 	"bytes"
 	"fmt"
+	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -12,15 +13,10 @@ import (
 
 func PublishToS3(key string, buffer *bytes.Buffer) (string, error) {
 
-	const bucketName = "bucketeer-2e671b59-4d1e-47d6-bfd3-f1fa4e3d7f84"
-	const region = "us-east-1"
-	const accessKeyID = "AKIAVZH4SBSYZJFN4IVH"
-	const secretAccessKey = "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"
-
-	creds := credentials.Value{AccessKeyID: accessKeyID, SecretAccessKey: secretAccessKey}
+	creds := credentials.Value{AccessKeyID: os.Getenv("BUCKETEER_AWS_ACCESS_KEY_ID"), SecretAccessKey: os.Getenv("BUCKETEER_AWS_SECRET_ACCESS_KEY")}
 
 	sess, sessErr := session.NewSession(&aws.Config{
-		Region:      aws.String(region),
+		Region:      aws.String(os.Getenv("BUCKETEER_AWS_REGION")),
 		Credentials: credentials.NewStaticCredentialsFromCreds(creds),
 	})
 
@@ -29,7 +25,7 @@ func PublishToS3(key string, buffer *bytes.Buffer) (string, error) {
 	}
 
 	result, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
-		Bucket: aws.String(bucketName),
+		Bucket: aws.String(os.Getenv("BUCKETEER_BUCKET_NAME")),
 		Key:    aws.String(key),
 		Body:   buffer,
 	})
