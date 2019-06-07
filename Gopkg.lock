@@ -10,7 +10,7 @@
   version = "v2.0.0"
 
 [[projects]]
-  digest = "1:495d57b9444476dbdcad8420c73a84b5b72e7e058b011b17e218e759c16f66fd"
+  digest = "1:b7fabcc244c3f893cba25f5f7ee03ac54dea8c2b2ba6a8455316ad19f1b2a918"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -40,6 +40,7 @@
     "private/protocol",
     "private/protocol/eventstream",
     "private/protocol/eventstream/eventstreamapi",
+    "private/protocol/json/jsonutil",
     "private/protocol/query",
     "private/protocol/query/queryutil",
     "private/protocol/rest",
@@ -51,8 +52,8 @@
     "service/sts",
   ]
   pruneopts = "UT"
-  revision = "0db84dcbcc56669065730700b054eb6d1438a0f7"
-  version = "v1.19.33"
+  revision = "4be228a772ad27b69e25c148dc794a17bf7b735c"
+  version = "v1.19.45"
 
 [[projects]]
   digest = "1:3af6be4fee7c08f81f13d36f04ffb63ad4b6b5aaba12cce96095c7c2863d4912"
