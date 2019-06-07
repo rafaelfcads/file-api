@@ -4,28 +4,60 @@ import (
 	"C"
 	"bytes"
 	"fmt"
-
+	_ "image/png"
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/rafaelfcads/file-api/model"
 )
 
 func createHeader(sheet string, xlsx *excelize.File) {
-	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 1), "Customer name")
-	xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 1), "Customer code")
-	xlsx.SetCellValue(sheet, fmt.Sprintf("C%d", 1), "Currency")
+	const config = `{"x_scale": 0.5, "y_scale": 0.5, "hyperlink": "#Sheet2!D8", "hyperlink_type": "Location"}`
+	errPicture := xlsx.AddPicture(sheet, "A1", "./image/icon-embraer.png", config)
+	if errPicture != nil {
+        fmt.Println(errPicture)
+	}
+	errColWidth := xlsx.SetColWidth(sheet, "A", "I", 20)
+	if errColWidth != nil {
+        fmt.Println(errColWidth)
+	}
+	format := `{"table_name":"createHeaderTable","table_style":"TableStyleMedium2"}`
+	err := xlsx.AddTable(sheet, "A5", "C6", format)
+	if err != nil {
+        fmt.Println(err)
+	}
+	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 5), "Customer name")
+	xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 5), "Customer code")
+	xlsx.SetCellValue(sheet, fmt.Sprintf("C%d", 5), "Currency")
 }
 
 func createHeaderSummary(sheet string, xlsx *excelize.File) {
-	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 4), "SUMMARY")
-	xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 4), "TOTAL")
-	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 5), "Overdue")
-	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 6), "Credit")
-	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 7), "Dispute")
-	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 8), "Not Overdue")
+	format := `{"table_name":"createHeaderSummaryTable","table_style":"TableStyleMedium2"}`
+	err := xlsx.AddTable(sheet, "A8", "B12", format)
+	if err != nil {
+        fmt.Println(err)
+	}
+
+	cellStyle := `{"font":{"bold":true, "family":"Berlin Sans FB Demi","color":"#FF0000"}}`
+	style, errNewStyle := xlsx.NewStyle(cellStyle)
+	if errNewStyle != nil {
+		fmt.Println(errNewStyle)
+	}
+
+	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 8), "SUMMARY")
+	xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 8), "TOTAL")
+	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 9), "Overdue")
+	xlsx.SetCellStyle(sheet, fmt.Sprintf("A%d", 9), fmt.Sprintf("A%d", 9), style)
+	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 10), "Credit")
+	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 11), "Dispute")
+	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 12), "Not Overdue")
 }
 
-func createHeaderRow(sheet string, xlsx *excelize.File) {
-	const row = 10
+func createHeaderRow(sheet string, xlsx *excelize.File, len int) {
+	const row = 14
+	format := `{"table_name":"createHeaderRowTable","table_style":"TableStyleMedium2"}`
+	err := xlsx.AddTable(sheet, "A14", fmt.Sprintf("I%d", row + len), format)
+	if err != nil {
+        fmt.Println(err)
+	}
 	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", row), "CUSTOMER")
 	xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", row), "INVOICE #")
 	xlsx.SetCellValue(sheet, fmt.Sprintf("C%d", row), "REFERENCE #")
@@ -50,24 +82,30 @@ func createSheet(row int, name string, xlsx *excelize.File) {
 func JsonToXlsx(docs model.DocumentFile) (*bytes.Buffer, error) {
 
 	xlsx := excelize.NewFile()
-	const rowInit = 11
+	const rowInit = 15
 
 	for keyMain, docItem := range docs.Consolidates {
 		sheet := docItem.SalesOrganization + "_" + docItem.Currency
 		createSheet(keyMain, sheet, xlsx)
 		createHeader(sheet, xlsx)
-		xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 2), docItem.CustomerName)
-		xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 2), docItem.CustomerCode)
-		xlsx.SetCellValue(sheet, fmt.Sprintf("C%d", 2), docItem.Currency)
+		xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 6), docItem.CustomerName)
+		xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 6), docItem.CustomerCode)
+		xlsx.SetCellValue(sheet, fmt.Sprintf("C%d", 6), docItem.Currency)
 
 		createHeaderSummary(sheet, xlsx)
-		xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 5), docItem.Overdue)
-		xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 6), docItem.Credit)
-		xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 7), docItem.Dispute)
-		xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 8), docItem.NotOverdue)
+		cellStyle := `{"font":{"bold":true, "family":"Berlin Sans FB Demi","color":"#FF0000"}}`
+		style, errNewStyle := xlsx.NewStyle(cellStyle)
+		if errNewStyle != nil {
+			fmt.Println(errNewStyle)
+		}
+		xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 9), docItem.Overdue)
+		xlsx.SetCellStyle(sheet, fmt.Sprintf("B%d", 9), fmt.Sprintf("B%d", 9), style)
+		xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 10), docItem.Credit)
+		xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 11), docItem.Dispute)
+		xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 12), docItem.NotOverdue)
 
 		for key, doc := range docItem.Docs {
-			createHeaderRow(sheet, xlsx)
+			createHeaderRow(sheet, xlsx, len(docItem.Docs))
 			xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", rowInit+key), doc.CustomerCode)
 			xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", rowInit+key), doc.Number)
 			xlsx.SetCellValue(sheet, fmt.Sprintf("C%d", rowInit+key), doc.ReferenceNumber)
