@@ -117,10 +117,6 @@ func JsonToXlsx(docs model.DocumentFile) (*bytes.Buffer, error) {
 			xlsx.SetCellValue(sheet, fmt.Sprintf("I%d", rowInit+key), doc.TotalAmount)
 		}
 	}
-	err := xlsx.SaveAs("./Booooooo.xlsx")
-	fmt.Println("Salvou!!!!")
-    if err != nil {
-        fmt.Println(err)
-    }
+
 	return xlsx.WriteToBuffer()
 }
