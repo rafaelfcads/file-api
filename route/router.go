@@ -18,6 +18,7 @@ type Routes []Route
 
 var routes = Routes{
 	Route{"DocumentCreate", "POST", "/documents", handler.Document},
+	Route{"DocumentGet", "GET", "/documents/{key}", handler.Get},
 }
 
 func NewRouter() *mux.Router {

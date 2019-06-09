@@ -10,7 +10,7 @@
   version = "v2.0.0"
 
 [[projects]]
-  digest = "1:b7fabcc244c3f893cba25f5f7ee03ac54dea8c2b2ba6a8455316ad19f1b2a918"
+  digest = "1:ad0d5fc85edfb4114a3495ceb664ffba6d96e7fd8b11d88f61e75c29095d8a7d"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -52,8 +52,8 @@
     "service/sts",
   ]
   pruneopts = "UT"
-  revision = "4be228a772ad27b69e25c148dc794a17bf7b735c"
-  version = "v1.19.45"
+  revision = "36f1478b1b241bd8ba1e21424b85eeb1f74f2bb4"
+  version = "v1.19.46"
 
 [[projects]]
   digest = "1:3af6be4fee7c08f81f13d36f04ffb63ad4b6b5aaba12cce96095c7c2863d4912"
@@ -86,6 +86,7 @@
     "github.com/aws/aws-sdk-go/aws",
     "github.com/aws/aws-sdk-go/aws/credentials",
     "github.com/aws/aws-sdk-go/aws/session",
+    "github.com/aws/aws-sdk-go/service/s3",
     "github.com/aws/aws-sdk-go/service/s3/s3manager",
     "github.com/gorilla/mux",
   ]
