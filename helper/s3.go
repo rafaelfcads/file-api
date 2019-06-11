@@ -34,7 +34,7 @@ func PublishToS3(key string, buffer *bytes.Buffer) (string, error) {
 	return result.Location, err
 }
 
-func GetS3AsInt64(key string) (int64, error) {
+func GetS3AsBuffer(key string) (*aws.WriteAtBuffer, error) {
 	creds := credentials.Value{AccessKeyID: os.Getenv("BUCKETEER_AWS_ACCESS_KEY_ID"), SecretAccessKey: os.Getenv("BUCKETEER_AWS_SECRET_ACCESS_KEY")}
 
 	sess, sessErr := session.NewSession(&aws.Config{
@@ -43,22 +43,24 @@ func GetS3AsInt64(key string) (int64, error) {
 	})
 
 	if sessErr != nil {
-		return -1, fmt.Errorf("failed to create sess %q, %v", key, sessErr)
+		return nil, fmt.Errorf("failed to create sess %q, %v", key, sessErr)
 	}
 
-	f, err := os.Create("./" + key + ".xlsx")
-	if err != nil {
-		return -1, fmt.Errorf("failed to create file %q, %v", key, sessErr)
-	}
+	// f, err := os.Create("./" + key + ".xlsx")
+	// if err != nil {
+	// 	return -1, fmt.Errorf("failed to create file %q, %v", key, sessErr)
+	// }
 
-	downloader, err := s3manager.NewDownloader(sess).Download(f, &s3.GetObjectInput{
+	buff := &aws.WriteAtBuffer{}
+
+	_, err := s3manager.NewDownloader(sess).Download(buff, &s3.GetObjectInput{
 		Bucket: aws.String(os.Getenv("BUCKETEER_BUCKET_NAME")),
-		Key:    aws.String(os.Getenv("BUCKETEER_AWS_ACCESS_URI")+key),
+		Key:    aws.String(key),
 	})
 
 	if err != nil {
-		return -1, fmt.Errorf("failed to write file %q, %v", key, sessErr)
+		return nil, fmt.Errorf("failed to write file %q, %v", key, err)
 	}
 
-	return downloader, err
+	return buff, err
 }

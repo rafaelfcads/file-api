@@ -44,12 +44,12 @@ func Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["key"]
 
-	int64Resp, err := helper.GetS3AsInt64(key)
+	buff, err := helper.GetS3AsBuffer(key)
 
 	if err != nil {
 		helper.RespondWithError(w, http.StatusInternalServerError, err.Error())
 	}
 
-	fmt.Println("S3 file location:", int64Resp)
-	helper.RespondWithInt64(w, http.StatusOK, int64Resp)
+	fmt.Println("S3 file location:", buff)
+	helper.RespondWithBase64(w, http.StatusOK, buff)
 }
