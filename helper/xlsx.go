@@ -19,22 +19,22 @@ func createHeader(sheet string, xlsx *excelize.File) {
 	if errColWidth != nil {
         fmt.Println(errColWidth)
 	}
-	format := `{"table_name":"createHeaderTable","table_style":"TableStyleMedium2"}`
-	err := xlsx.AddTable(sheet, "A5", "C6", format)
-	if err != nil {
-        fmt.Println(err)
-	}
+	// format := `{"table_name":"createHeaderTable","table_style":"TableStyleMedium2"}`
+	// err := xlsx.AddTable(sheet, "A5", "C6", format)
+	// if err != nil {
+    //     fmt.Println(err)
+	// }
 	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", 5), "Customer name")
 	xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", 5), "Customer code")
 	xlsx.SetCellValue(sheet, fmt.Sprintf("C%d", 5), "Currency")
 }
 
 func createHeaderSummary(sheet string, xlsx *excelize.File) {
-	format := `{"table_name":"createHeaderSummaryTable","table_style":"TableStyleMedium2"}`
-	err := xlsx.AddTable(sheet, "A8", "B12", format)
-	if err != nil {
-        fmt.Println(err)
-	}
+	// format := `{"table_name":"createHeaderSummaryTable","table_style":"TableStyleMedium2"}`
+	// err := xlsx.AddTable(sheet, "A8", "B12", format)
+	// if err != nil {
+    //     fmt.Println(err)
+	// }
 
 	cellStyle := `{"font":{"bold":true, "family":"Berlin Sans FB Demi","color":"#FF0000"}}`
 	style, errNewStyle := xlsx.NewStyle(cellStyle)
@@ -53,11 +53,11 @@ func createHeaderSummary(sheet string, xlsx *excelize.File) {
 
 func createHeaderRow(sheet string, xlsx *excelize.File, len int) {
 	const row = 14
-	format := `{"table_name":"createHeaderRowTable","table_style":"TableStyleMedium2"}`
-	err := xlsx.AddTable(sheet, "A14", fmt.Sprintf("I%d", row + len), format)
-	if err != nil {
-        fmt.Println(err)
-	}
+	// format := `{"table_name":"createHeaderRowTable","table_style":"TableStyleMedium2"}`
+	// err := xlsx.AddTable(sheet, "A14", fmt.Sprintf("I%d", row + len), format)
+	// if err != nil {
+    //     fmt.Println(err)
+	// }
 	xlsx.SetCellValue(sheet, fmt.Sprintf("A%d", row), "CUSTOMER")
 	xlsx.SetCellValue(sheet, fmt.Sprintf("B%d", row), "INVOICE #")
 	xlsx.SetCellValue(sheet, fmt.Sprintf("C%d", row), "REFERENCE #")
